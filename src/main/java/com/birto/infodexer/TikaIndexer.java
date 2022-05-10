@@ -34,7 +34,7 @@ public class TikaIndexer {
     private IndexWriterConfig config;
     private IndexWriter writer;
     private boolean DEBUG = false;
-    private Directory indexDirectory;
+    private Directory indexDirectory;   
     private static final Set<String> textualMetadataFields = new HashSet<String>();
     public long débutTempsIndexation;
     public long finTempsIndexation;
@@ -57,6 +57,7 @@ public class TikaIndexer {
 
         //Répertoire de l'index (assignation) 
         indexDirectory = FSDirectory.open(Paths.get(indexDirectoryLocationString));
+        
         
         //Créer l'indexeur        // could be nice to use a FrenchAnalyser or with FrenchStop Words
         config = new IndexWriterConfig(new StandardAnalyzer()).setOpenMode(OpenMode.CREATE_OR_APPEND);
@@ -81,9 +82,9 @@ public class TikaIndexer {
     }
 
     public void indexFile(File file) throws IOException, Exception {
-      //  System.out.println("Attempting to Index " + file.getCanonicalPath());
+        System.out.println("Attempting to Index " + file.getCanonicalPath());
         Document document = getDocument(file);
-     //   System.out.println(writer.getDocStats());
+        System.out.println(writer.getDocStats());
         writer.addDocument(document);
     }
 
@@ -128,7 +129,10 @@ public class TikaIndexer {
     }
 
     public void commit() throws CorruptIndexException, IOException {
+        
+        
         writer.commit();
+        
     }
 
     public IndexWriterConfig getConfig() {

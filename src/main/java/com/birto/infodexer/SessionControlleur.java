@@ -35,7 +35,7 @@ public class SessionControlleur {
         sessionControlleur.session = new Session(LocalDateTime.now(), System.getProperty("user.name"), System.getProperty("os.name"));             //Prépare la Session avec les paramètres clés...      // DEBUG**  System.out.println(s.getDébutSession() + " " + s.getNomUsager() + " " + s.getOS());
 
         //ActiveDocsDirectory est-il vide? Si oui, on copie baseDocsInit dedans
-        try {            
+       /* try {            
             
             if (sessionControlleur.session.isActiveDocsEmpty()) {
                 copierBaseDocstoActiveDocs(sessionControlleur.session.getPathToBaseDocs(), sessionControlleur.session.getpathActiveDocs());
@@ -52,18 +52,20 @@ public class SessionControlleur {
         }
         catch (IOException ex) {
             Logger.getLogger(SessionControlleur.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
 
         
         
         /// INDEXING COMMENCE ICI
-        TikaIndexer tikaIndexeur = new TikaIndexer(sessionControlleur.session.getPathToIndex().toString(), false);      // Indexeur Init
+        TikaIndexer tikaIndexeur = new TikaIndexer(sessionControlleur.session.getPathToIndex().toString(), true);      // Indexeur Init
 
         if (!tikaIndexeur.checkIndexExist()) {                                                       // Vérifier si index existe ou non.
 
             try {
-                /*INDEX.CREATE*/ tikaIndexeur.createIndex(sessionControlleur.session.getpathActiveDocs().toString());    //debug   System.out.println("session.getpathActiveDocs().toString() = " + session.getpathActiveDocs().toString());
+                /*INDEX.CREATE*/ tikaIndexeur.createIndex(sessionControlleur.session.getPathToActiveDocs().toString()) ;    //debug   System.out.println("session.getpathActiveDocs().toString() = " + session.getpathActiveDocs().toString());
+              tikaIndexeur.commit();
             }
+            
             catch (Exception ex) {
                 Logger.getLogger(SessionControlleur.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -83,6 +85,10 @@ public class SessionControlleur {
 //*************************************  /// INDEXING FINIT ICI ////**********************************************************        
 
 
+        System.out.println("SessionControlleur.session.getPathToIndex().toString()");
+        
+        System.out.println(sessionControlleur.session.getPathToIndex().toString());
+
           //Searcher instantiation 
         Searcher moteurRecherche = new Searcher(sessionControlleur.session.getPathToIndex().toString());
         
@@ -94,31 +100,27 @@ public class SessionControlleur {
         /* Create and display the form */       
         EventQueue.invokeLater(() -> {
             try {
-            
+               System.out.println("1");               
+                
             FrameControlleur fControl = new FrameControlleur(tikaIndexeur, new FrameCentral(), moteurRecherche,sessionControlleur);                           
+          
+                      System.out.println("2");              
             fControl.initView();
+           
+                     System.out.println("3");          
+                     
+                     
             fControl.initControlleur();   
+            
+                     System.out.println("4"); 
             }
             catch (IOException e) {
+                   System.out.println(e.getMessage());               
                 System.out.println(e.getMessage());               
             }
         });
            }
 
-    
-    //Il s'agit d'une méthode permettant de copier les documents (fichiers clés pour l'application) lors du lancement initial de l'application - DUMP all files from baseDocs into ActiveDocs directory. 
-    public static void copierBaseDocstoActiveDocs(Path source, Path dest) {
-
-        //at runtime if if true that is empty (ActiveDocs)...then copy all the stuff into baseDocs
-        try {
-            FileUtils.copyDirectory(source.toFile(), dest.toFile());
-            System.out.println("The copying of baseDocs into ActiveSDocs is being atempted");
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     public Session getSession() {
         return session;

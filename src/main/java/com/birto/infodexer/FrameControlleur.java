@@ -59,7 +59,7 @@ public class FrameControlleur implements ActionListener {
         this.view = frameCentral;
         this.moteurRecherche = moteurRecherche;
         this.sessionControlleur = sessionControlleur;
-        this.destActiveDocs = new File(sessionControlleur.getSession().getpathActiveDocs().toString());
+        this.destActiveDocs = new File(sessionControlleur.getSession().getPathToActiveDocs().toString());
     }
     
 
@@ -215,18 +215,6 @@ public class FrameControlleur implements ActionListener {
         return jfc.getSelectedFile();
 
     }
-
-    /*  Source: https://tips4java.wordpress.com/2009/01/28/single-root-file-chooser/
-    
-JFileChooser chooser = new JFileChooser(fsv);
-    */
-      
-
-    
-    // Lors de la sélection du retrait d'un fichier le fichier:
-                //::>le fileChooser doit initialiement partir du activeDOcs folder
-               //::> Valider que le fichier choisi réside bien dans Active Docs ->Sinon Msg d'erreur
-                            
     
     
     
@@ -424,7 +412,7 @@ JFileChooser chooser = new JFileChooser(fsv);
               
      
 
-//marche pas   view.getResultspnl().add(scrpane);                        // view.getResultSectionpnl().add(view.getResultspnl(), "Non-vide");        
+        //marche pas   view.getResultspnl().add(scrpane);                        // view.getResultSectionpnl().add(view.getResultspnl(), "Non-vide");        
         
        
        
@@ -433,7 +421,6 @@ JFileChooser chooser = new JFileChooser(fsv);
         System.out.println(view.getCardLayoutResultsSection().toString());
         
     }
-    
 
     
     

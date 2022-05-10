@@ -1,13 +1,17 @@
 C:\Java\InfoDexer\src\main\java\com\birto\infodexer\Util.java
+C:\Java\InfoDexer\src\main\java\com\birto\infodexer\Correspondance.java
 C:\Java\InfoDexer\src\main\java\com\birto\infodexer\SimpleFiltrerRecherche.java
+C:\Java\InfoDexer\src\main\java\com\birto\infodexer\StringUtils.java
 C:\Java\InfoDexer\src\main\java\com\birto\infodexer\Session.java
 C:\Java\InfoDexer\src\main\java\com\birto\infodexer\FiltreurExtension.java
+C:\Java\InfoDexer\src\main\java\com\birto\infodexer\MainFrame.java
 C:\Java\InfoDexer\src\main\java\com\birto\infodexer\IRechercheFactory.java
 C:\Java\InfoDexer\src\main\java\com\birto\infodexer\SessionControlleur.java
 C:\Java\InfoDexer\src\main\java\com\birto\infodexer\IRecherche.java
 C:\Java\InfoDexer\src\main\java\com\birto\infodexer\UsineRequête.java
 C:\Java\InfoDexer\src\main\java\com\birto\infodexer\FileAction.java
 C:\Java\InfoDexer\src\main\java\com\birto\infodexer\FrameControlleur.java
+C:\Java\InfoDexer\src\main\java\com\birto\infodexer\FileUtils.java
 C:\Java\InfoDexer\src\main\java\com\birto\infodexer\FrameCentral.java
 C:\Java\InfoDexer\src\main\java\com\birto\infodexer\SingleRootFileSystemView.java
 C:\Java\InfoDexer\src\main\java\com\birto\infodexer\TikaIndexer.java

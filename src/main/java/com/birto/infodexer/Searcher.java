@@ -62,11 +62,13 @@ public class Searcher {
                
        // indexReader = DirectoryReader.openIfChanged(indexReader);   
         // indexSearcher = new IndexSearcher(indexReader);     
-        
+        System.out.println("BUG HERE start");
+                System.out.println("BUG HERE start");
+                System.out.println("Paths.get(indexDirectoryLocationString = "+ Paths.get(indexDirectoryLocationString ));
         indexReader = DirectoryReader.open(FSDirectory.open(Paths.get(indexDirectoryLocationString)));                                        //System.out.println("DEBUGGER --indexReader info: " + indexReader.maxDoc());
         indexSearcher = new IndexSearcher(indexReader);             
-               
-        
+         System.out.println("BUG HERE end");        
+                System.out.println("BUG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> end");   
         
         Query queryComplete;
         IRecherche recherche;
