@@ -57,8 +57,7 @@ public class TikaIndexer {
 
         //Répertoire de l'index (assignation) 
         indexDirectory = FSDirectory.open(Paths.get(indexDirectoryLocationString));
-        
-        
+                
         //Créer l'indexeur        // could be nice to use a FrenchAnalyser or with FrenchStop Words
         config = new IndexWriterConfig(new StandardAnalyzer()).setOpenMode(OpenMode.CREATE_OR_APPEND);
         writer = new IndexWriter(indexDirectory, config);

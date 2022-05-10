@@ -12,14 +12,12 @@ com\birto\infodexer\IRecherche.class
 com\birto\infodexer\StringUtils.class
 com\birto\infodexer\Searcher.class
 com\birto\infodexer\RechercheExtrant.class
-com\birto\infodexer\Correspondance.class
 com\birto\infodexer\FrameControlleur$2.class
 com\birto\infodexer\MainFrame$3.class
 com\birto\infodexer\FileUtils.class
 com\birto\infodexer\MainFrame.class
 com\birto\infodexer\Util.class
 com\birto\infodexer\MainFrame$2.class
-com\birto\infodexer\Session$1.class
 com\birto\infodexer\SingleRootFileSystemView.class
 com\birto\infodexer\FrameControlleur$3.class
 com\birto\infodexer\FrameControlleur.class

@@ -168,7 +168,7 @@ public class FrameCentral extends JFrame {
     
              
         barreRecherchePanelpnl = new JPanel();
-        barreRecherchePanelpnl.setLayout(new BoxLayout(barreRecherchePanelpnl, BoxLayout.Y_AXIS));         barreRecherchePanelpnl.setBorder(new TitledBorder("barreRecherchePanelpnl"));
+        barreRecherchePanelpnl.setLayout(new BoxLayout(barreRecherchePanelpnl, BoxLayout.Y_AXIS));       //  barreRecherchePanelpnl.setBorder(new TitledBorder("barreRecherchePanelpnl"));
            
                         
        /*//Titre de l'Application

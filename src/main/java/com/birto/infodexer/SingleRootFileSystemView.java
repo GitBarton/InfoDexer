@@ -14,6 +14,8 @@ import javax.swing.filechooser.*;
  *  The "Up One Level" button will be disable when at the root.
  *
  */
+
+//Source: Externe
 public class SingleRootFileSystemView extends FileSystemView
 {
 	File root;

@@ -4,13 +4,11 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-import org.apache.commons.io.FileUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 
@@ -23,37 +21,25 @@ public class SessionControlleur {
     
     private Session session;
 
-    static Boolean readyToOperate = false;
-    // FrameCentral view = new FrameCentral();
-  
-
     
     
     public static void main(String[] args) throws URISyntaxException, ParseException, IOException {
 
         SessionControlleur sessionControlleur = new SessionControlleur();
         sessionControlleur.session = new Session(LocalDateTime.now(), System.getProperty("user.name"), System.getProperty("os.name"));             //Prépare la Session avec les paramètres clés...      // DEBUG**  System.out.println(s.getDébutSession() + " " + s.getNomUsager() + " " + s.getOS());
-
-        //ActiveDocsDirectory est-il vide? Si oui, on copie baseDocsInit dedans
-       /* try {            
-            
-            if (sessionControlleur.session.isActiveDocsEmpty()) {
-                copierBaseDocstoActiveDocs(sessionControlleur.session.getPathToBaseDocs(), sessionControlleur.session.getpathActiveDocs());
-
-                final JOptionPane pane = new JOptionPane();
-                Timer t = new Timer(4000, (ActionEvent e) -> {                    
-                    JOptionPane.getRootFrame().dispose();
-                });
-                t.start();
-                JOptionPane.showMessageDialog(pane, "Premier Lancement de l'application... Nous allons copier des fichiers de bases et les indexer pour vous.\nVeuillez patientez...", "Info-Dexer (Copie des fichiers)", 1);
-                t.stop();
-            }
-        
+      
+        //Premier lancement de l'application? 
+        if (sessionControlleur.session.isEstPremierLancement()) {
+            final JOptionPane pane = new JOptionPane();
+            Timer t = new Timer(4000, (ActionEvent e) -> {
+                JOptionPane.getRootFrame().dispose();
+            });
+            t.start();
+            JOptionPane.showMessageDialog(pane, "Premier Lancement de l'application... Nous allons copier des fichiers de bases et les indexer pour vous.\nVeuillez patientez...", "Info-Dexer (Copie des fichiers)", 1);
+            t.stop();
         }
-        catch (IOException ex) {
-            Logger.getLogger(SessionControlleur.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
 
+        
         
         
         /// INDEXING COMMENCE ICI
@@ -61,19 +47,19 @@ public class SessionControlleur {
 
         if (!tikaIndexeur.checkIndexExist()) {                                                       // Vérifier si index existe ou non.
 
-            try {
-                /*INDEX.CREATE*/ tikaIndexeur.createIndex(sessionControlleur.session.getPathToActiveDocs().toString()) ;    //debug   System.out.println("session.getpathActiveDocs().toString() = " + session.getpathActiveDocs().toString());
-              tikaIndexeur.commit();
+            try {/*INDEX.CREATE*/ 
+                
+                tikaIndexeur.createIndex(sessionControlleur.session.getPathToActiveDocs().toString()) ;    //debug   System.out.println("session.getpathActiveDocs().toString() = " + session.getpathActiveDocs().toString());
+                tikaIndexeur.commit();
             }
             
             catch (Exception ex) {
                 Logger.getLogger(SessionControlleur.class.getName()).log(Level.SEVERE, null, ex);
             }
                                                                                                        //debug   System.out.println("----------------------------------------------------------------------------------------------");        System.out.println("Nombre de document dans l'index: " + tikaIndexeur.getWriter().getDocStats().numDocs);        System.out.println("----------------------------------------------------------------------------------------------");
-                                                                                                        
+         
            
-           
-   //            CheckIndex checkInd = new CheckIndex( tikaIndexeur.getIndexDirectory(), tikaIndexeur.getWriter().IndexWriter.WRITE_LOCK_NAME ) ;
+   //          CheckIndex checkInd = new CheckIndex( tikaIndexeur.getIndexDirectory(), tikaIndexeur.getWriter().IndexWriter.WRITE_LOCK_NAME ) ;
           
    //          tikaIndexeur.getWriter().close();                                                                                           //debug    System.out.println("----------------------------------------------------------------------------------------------\\\r\\nÉtat de l'index actuel est: " + tikaIndexeur.checkIndexStatus(checkInd.checkIndex()));  System.out.println("----------------------------------------------------------------------------------------------");         System.out.println("Index créé en : " + (tikaIndexeur.finTempsIndexation - tikaIndexeur.débutTempsIndexation) + " milliseconde.");
           
@@ -84,39 +70,25 @@ public class SessionControlleur {
         
 //*************************************  /// INDEXING FINIT ICI ////**********************************************************        
 
-
-        System.out.println("SessionControlleur.session.getPathToIndex().toString()");
-        
-        System.out.println(sessionControlleur.session.getPathToIndex().toString());
-
-          //Searcher instantiation 
+        //Searcher instantiation 
         Searcher moteurRecherche = new Searcher(sessionControlleur.session.getPathToIndex().toString());
-        
-        //Safety
-        SessionControlleur.readyToOperate = true; // To be fully implemented... 
+
         
 
 // ***************************************************************** GUI ***********************************************   
-        /* Create and display the form */       
+      
+       /* Create and display the form */
         EventQueue.invokeLater(() -> {
             try {
-               System.out.println("1");               
-                
-            FrameControlleur fControl = new FrameControlleur(tikaIndexeur, new FrameCentral(), moteurRecherche,sessionControlleur);                           
-          
-                      System.out.println("2");              
-            fControl.initView();
-           
-                     System.out.println("3");          
-                     
-                     
-            fControl.initControlleur();   
-            
-                     System.out.println("4"); 
+
+                FrameControlleur fControl = new FrameControlleur(tikaIndexeur, new FrameCentral(), moteurRecherche, sessionControlleur);
+                fControl.initView();
+                fControl.initControlleur();
+
             }
             catch (IOException e) {
-                   System.out.println(e.getMessage());               
-                System.out.println(e.getMessage());               
+                System.out.println(e.getMessage());
+                System.out.println(e.getMessage());
             }
         });
            }

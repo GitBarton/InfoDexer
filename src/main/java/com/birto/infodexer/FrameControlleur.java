@@ -36,6 +36,7 @@ import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.JTextComponent;
 import org.apache.commons.io.FileUtils;
 import org.apache.lucene.index.Term;
@@ -43,15 +44,15 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.ScoreDoc;
 
 
-public class FrameControlleur implements ActionListener {
+public class FrameControlleur {
 
     private TikaIndexer indexer;
     FrameCentral view;
     Searcher moteurRecherche;
     SessionControlleur sessionControlleur;        
-    static Boolean listIsEmpty = true;
-    // Obtenir le chemin/File vers le Active Docs -- (répertoire)
-     File destActiveDocs; 
+    static Boolean listIsEmpty = true;   
+    DefaultCaret caret; 
+    File destActiveDocs; 
 
 
     public FrameControlleur(TikaIndexer indexer, FrameCentral frameCentral, Searcher moteurRecherche,  SessionControlleur sessionControlleur) {
@@ -95,17 +96,17 @@ public class FrameControlleur implements ActionListener {
     
     }
     
+    
     public void initControlleur() {
 
         //barre de recherche Listener pour SetEnabled(true or false)
-        /*1*/ enableRechercheBtnDocumentListener();   // Visibilité dynamique du button "Rechercher" en fonction du contenu du TextArea
+        enableRechercheBtnDocumentListener();   // Visibilité dynamique du button "Rechercher" en fonction du contenu du TextArea
                 
-        // BOUTON RECHERCHER*************************************************
+        // BOUTON RECHERCHER
         /*2*/ view.getLancerRecherchebtn().addActionListener((ActionEvent e) -> {                      
             
             try {
-                    revertEmptyResultPanel();  
-                                
+                    revertEmptyResultPanel();                                  
                     swapCardJpanelToResults ( prepCorrespondanceJPanelGenerator(   moteurRecherche.searchIndex ( prépareRechercheSéquence() , indexer.getWriter(), LocalDateTime.now(ZoneId.systemDefault()) 
                     ) ) );                                                                
            
@@ -116,21 +117,19 @@ public class FrameControlleur implements ActionListener {
         });
 
  
-        //Options avancées de recherche
+        //Label permettant l'accàs aux options avancées de recherche (filtrage par extension avec JList)
         view.getOptionsRecherchelbl().addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {     flipIsVisiblePanel(view.getContentTypeFiltreurPanelpnl());     }    });
                         
         
-        // ajout d'un listener qui cache le JList pour filtrer...
+        // ajout d'un listener qui cache le JList pour filtrer (iltrage par extension avec JList))...
         view.getCacherExtensionFiltrebtn().addActionListener(e -> view.getContentTypeFiltreurPanelpnl().setVisible(false));
        
-        //JLIST
+        //JList 
         view.getContentTypelst().getSelectionModel().addListSelectionListener(new SharedListSelectionHandler()); // can be removed???? <-to test???
-             
-        
-       // Gestion fichier //  *******************************************
-       /**/
+         
+
        //Hamburger Menu 
        view.getHamburgerMenubtn().addActionListener(e -> flipMenuFichierButtonsVisibility());
        
@@ -155,16 +154,11 @@ public class FrameControlleur implements ActionListener {
                 Logger.getLogger(FrameControlleur.class.getName()).log(Level.SEVERE, null, ex);
             }
         }   );  
-        // FIN ** *****************Gestion fichier //  *******************************************
+    
         
-        
-         
-// Button Réinitialiser le formulaire....
-               view.getRéinitialiserFormbtn().addActionListener(e -> clearAll(view));
-            
-               
- // Button Exporter
-        // To Implement...  
+         // Button Réinitialiser le formulaire....
+         view.getRéinitialiserFormbtn().addActionListener(e -> clearAll(view));
+
     }
 
     
@@ -377,8 +371,7 @@ public class FrameControlleur implements ActionListener {
         }
     }
 
-    
-    
+        
     
         //Enlever le panneau avec correspondance et mettre le vide
     public void revertEmptyResultPanel (  ) {            
@@ -389,42 +382,25 @@ public class FrameControlleur implements ActionListener {
           
    
     
-    
-    
       //Prendre le nouveau panneau et l'inclure dans le panneau fait pour montrer les résultats... 
-    public void swapCardJpanelToResults ( JScrollPane scrpane ) {                                                          //https://stackoverflow.com/questions/10823382/how-to-show-different-cards-in-a-cardlayout
-        
-         view.getCardLayoutResultsSection().show( view.getResultSectionpnl(), "non-vide");   
-         view.getResultspnl().removeAll();       
-         scrpane.getViewport().setViewPosition(new Point(0,0));  
-         view.getResultspnl().add(scrpane);
-         view.revalidate();
-         view.repaint();
-     
-        // view.revalidate();         
-        // view.repaint();
-                  
-        //enleve tout de la section rez  ||      view.getResultSectionpnl().removeAll();    
-        //add scrolpane to RezSectionpnl
-        // show the right card in the ResultSeciton non-vide?   <--Notsure bout this??         
-        //revalidate repoaint??
-               
-              
-     
+    public void swapCardJpanelToResults(JScrollPane scrpane) {                                                          //https://stackoverflow.com/questions/10823382/how-to-show-different-cards-in-a-cardlayout
 
-        //marche pas   view.getResultspnl().add(scrpane);                        // view.getResultSectionpnl().add(view.getResultspnl(), "Non-vide");        
-        
-       
-       
-   
+        view.getCardLayoutResultsSection().show(view.getResultSectionpnl(), "non-vide");
+        view.getResultspnl().removeAll();
+        view.getResultspnl().add(scrpane);
      
-        System.out.println(view.getCardLayoutResultsSection().toString());
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                scrpane.getVerticalScrollBar().setValue(0);
+            }
+        });
+        view.revalidate();
+        view.repaint();
+   
         
     }
 
     
-    
-        
     
     public UsineRequête prépareRechercheSéquence() {
 
@@ -485,9 +461,7 @@ public class FrameControlleur implements ActionListener {
         execEtHitstxt.append("Nombre de correspondances présente: " + countCorrespondance + "\n");
         execEtHitstxt.append("Temps d'éxécution (ms): " + execTime + "\n");
       
-             
-        //>>TODO>>> Why is there that anoying Grey thing ???               
-        
+        //Recherche sans filtrage par extension...           
         if (filtre.equals("aucun")) {     
             execEtHitstxt.append("Filtre d'extension utilisé (options avancées) : " + "Aucun\n");
            }   else {  execEtHitstxt.append("Filtre d'extension utilisé (options avancées) : " + filtre+"\n");               System.out.println("Filtre Utilisé :"+filtre);
@@ -497,12 +471,12 @@ public class FrameControlleur implements ActionListener {
         GridBagConstraints gbcExecHitsTxt = FrameCentral.makeConstraints (1, 1,     0, 0,    0.2, 0.5 );
         gbcExecHitsTxt.fill = GridBagConstraints.HORIZONTAL;
         gbcExecHitsTxt.anchor = GridBagConstraints.NORTH;
-        gbaglayoutCorrespondance.setConstraints(execEtHitstxt, gbcExecHitsTxt);   // TO KEEP AN EYE ON  - is the COmp the right one? 
+        gbaglayoutCorrespondance.setConstraints(execEtHitstxt, gbcExecHitsTxt);  
                          
         correspondanceIntérieurpnl.add(execEtHitstxt, gbcExecHitsTxt);
 
        
-        // Pour chaque ScoreDocs        // get the list of item from preCorrespondanceDate      // create a new Text Area + add constraints then add to new JPanel... 
+        // Pour chaque ScoreDocs        // get the list of item from preCorrespondanceDate     
         Map<String, String> input = new HashMap<>();
 
         int entrée = 1;        
@@ -513,8 +487,8 @@ public class FrameControlleur implements ActionListener {
             tempTextArea.setBackground(Color.CYAN);
              TitledBorder titleBorderCorresBottom = new TitledBorder ("[Correspondance "+entrée+"]"); 
              titleBorderCorresBottom.setTitleJustification(TitledBorder.CENTER);
-            tempTextArea.setBorder(BorderFactory.createCompoundBorder(titleBorderCorresBottom,  BorderFactory.createEmptyBorder(5, 5, 5, 5) ) );   //>>TODO>>>Add padding to TEXT Area:    
-          //  tempTextArea.setWrapStyleWord(false);
+            tempTextArea.setBorder(BorderFactory.createCompoundBorder(titleBorderCorresBottom,  BorderFactory.createEmptyBorder(5, 5, 5, 5) ) );      
+         
 
             input = prepCorrespondanceMap(scoreDoc);
             
@@ -522,7 +496,7 @@ public class FrameControlleur implements ActionListener {
             tempTextArea.append("Chemin du fichier (origine): " + input.get(Constants.FILE_PATH) + Util.newline);
             tempTextArea.append("Type de document : " + input.get(Constants.CONTENT_TYPE) + Util.newline);
             tempTextArea.append("Score de Lucene: " + input.get("Score") + Util.newline);                                 
-            // Nice to have ? --> tempTextArea.append("Requête traité par le moteur: " + input.get("StringSe") + Util.newline);      
+           
             
             GridBagConstraints gbcIterator = new GridBagConstraints();         
        
@@ -530,22 +504,20 @@ public class FrameControlleur implements ActionListener {
             gbcIterator.fill = GridBagConstraints.BOTH;
             gbcIterator.anchor = GridBagConstraints.NORTH;
             
-            gbaglayoutCorrespondance.setConstraints(tempTextArea, gbcIterator);   // TO KEEP AN EYE ON  - is the COmp the right one? 
+            gbaglayoutCorrespondance.setConstraints(tempTextArea, gbcIterator);   
                          
-            correspondanceIntérieurpnl.add(tempTextArea, gbcIterator);
-            correspondanceIntérieurpnl.setBackground(Color.GREEN);
+            correspondanceIntérieurpnl.add(tempTextArea, gbcIterator); //   correspondanceIntérieurpnl.setBackground(Color.GREEN);
             correspondanceIntérieurpnl.setVisible(true);
+            
                          
             entrée++; // augmenter l'itérateur et ensuite on ajoute autres entrées...  // à la fin il va falloir retourne le jPanel et s'amuser a le faire apparaitre et dispâraitre....      
 
         }
-                
-        
+                        
        JScrollPane  resultscp = new JScrollPane (correspondanceIntérieurpnl, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS ,HORIZONTAL_SCROLLBAR_NEVER  ); 
-       resultscp.setBorder( new TitledBorder("JScrollPane"));
-       resultscp.setBackground(Color.BLUE);
+     //   SmartScroller scroller =  new SmartScroller(resultscp, SmartScroller.VERTICAL, SmartScroller.START); 
        resultscp.getViewport().setPreferredSize(new Dimension(650, 700));
-       
+       resultscp.setAutoscrolls(false);
        return resultscp;     
     }
         
@@ -603,7 +575,7 @@ public class FrameControlleur implements ActionListener {
 
         if (panelToflipVisible.isVisible() == true) {
             panelToflipVisible.setVisible(false);
-            //repaint if needed? 
+         
             return;
         }
         panelToflipVisible.setVisible(true);
@@ -622,16 +594,10 @@ public class FrameControlleur implements ActionListener {
     }
 }
         
-    
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
 
     public void enableRechercheBtnDocumentListener() {
-
-        //get TextArea Fields  -! getSearchStringtxf
-        // get Button name  -! lancerRecherchebtn        
+            
         view.getSearchStringtxf().getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void removeUpdate(DocumentEvent e) {

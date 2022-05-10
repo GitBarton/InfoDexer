@@ -40,7 +40,7 @@ public class Session {
     private String nomUsager;
     private String os;
     private LocalDateTime débutSession, finSession;
-    private boolean isActiveDocsEmpty;
+    private boolean estPremierLancement = true;
     static  String  fileSeparator = System.getProperty("file.separator");
  
     final  static String  BASEDOCSINIT = "baseDocsInit";
@@ -55,6 +55,9 @@ public class Session {
         this.nomUsager = nomUsager;
         this.débutSession = débutSession;
         this.os = os;
+        estPremierLancement = !checkfolderExist(ACTIVEDOCS); //si Active doc n'existe pas c'est le premier lancement... 
+        
+        System.out.println("If true isActiveDocsEmpty  = First time run..."+ estPremierLancement);
         
         try {
             Session.init();
@@ -68,18 +71,12 @@ public class Session {
         
         pathToActiveDocs = Paths.get("./activeDocs/");
         pathToIndex = Paths.get("./index/");
-        pathToJournaux = Paths.get("./journal/");
-        
-        
-    //    setpathActiveDocs(Constants.ACTIVE_DOCS_PATH); // will set the pathToActiveDocs
-    //    setPathToBaseDocs(Constants.BASE_DOCS_PATH);  // will set the pathToBaseDocs
-    //    setPathToIndex(Constants.INDEX_PATH);
-    //    setPathToJournaux(Constants.JOURNAL_PATH);
+        pathToJournaux = Paths.get("./journal/");      
+
     }
 
     
-    
-    
+        
     
      public static void  init ( ) throws UnsupportedEncodingException, MalformedURLException, IOException, URISyntaxException {
     
@@ -137,6 +134,7 @@ public class Session {
         }
     }
     
+    /*
 @Deprecated
     public static void copyBaseDocstoActive(String fileName) throws URISyntaxException {
     
@@ -189,7 +187,10 @@ public class Session {
             System.out.println("ERROR in COPYBASEDOCSTOACTIVEDOCS");
         }    
     }
+    */
     
+    
+    /*
     
     //copyFromJar("/path/to/the/template/in/jar", Paths.get("/tmp/from-jar"))
     public static void copyFromJar(String source, final Path target) throws URISyntaxException, IOException {
@@ -246,7 +247,7 @@ public class Session {
 
     });
 }
-           
+          */ 
     
     
      public static String getJarLaunchPath() throws UnsupportedEncodingException {
@@ -256,23 +257,8 @@ public class Session {
       return parentPath;
    }
         
-    
-    public static Path stringToPath(String str) throws URISyntaxException {
 
-//Util to convert from String to Path for the FSDIrectory.Open
-        URI uri = null;
-        try {
-            uri = Session.class.getClassLoader().getResource(str).toURI();
-        }
-        catch (URISyntaxException ex) {
-            System.out.println("uri:" + uri);
-            Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return Paths.get(uri);    //Convert the string to a Path
-    }
-
-    
+    /*
     public static void copyDirectory(String sourceDirectoryLocation, String destinationDirectoryLocation) 
     		  throws IOException {
 	    Files.walk(Paths.get(sourceDirectoryLocation))
@@ -286,62 +272,21 @@ public class Session {
 	          }
 	      });
 	}
+*/
 
-        
-    
-
-    
-    public void testFileGetPath(String str_test){
-    
-    File file = null;
-    String resource = str_test;
-URL res = getClass().getResource(resource);
-
-if (res.getProtocol().equals("jar")) {
-    try {
-        InputStream input = getClass().getResourceAsStream(resource);
-        file = File.createTempFile("tempfile", ".tmp");
-                
-        System.out.println(file.getAbsolutePath());
-        
-        
-    } catch (IOException ex) {
-       
-    }
-} else {
-    //this will probably work in your IDE, but not from a JAR
-    file = new File(res.getFile());
-}
-
-if (file != null && !file.exists()) {
-    throw new RuntimeException("Error: File " + file + " not found!");
-}              
-    }
-    
-    
-
+     /*
     private static boolean isDirEmpty(final Path directory) throws IOException {
         try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(directory)) {
             return !dirStream.iterator().hasNext();
         }
     }
-
-    public boolean isActiveDocsEmpty() throws URISyntaxException, IOException {
-        // How can I test if ActiveDocs Exists and not empty?
-        try {
-            System.out.println("Let\'s check if the activeDocs is empty or not :: " + isDirEmpty(pathToActiveDocs));
-        }
-        catch (IOException ex) {
-            Logger.getLogger(SessionControlleur.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return isDirEmpty(pathToActiveDocs);
-    }
-
+*/
     
     
-    public void setIsActiveDocsEmpty(boolean isActiveDocsEmpty) throws IOException {
-        this.isActiveDocsEmpty = isDirEmpty(pathToActiveDocs);
+    public boolean isEstPremierLancement() {
+        return estPremierLancement;
     }
+    
 
     public String getNomUsager() {
         return nomUsager;
