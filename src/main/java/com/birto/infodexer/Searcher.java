@@ -59,30 +59,23 @@ public class Searcher {
     
     
     public RechercheExtrant searchIndex(UsineRequête requêtePréUsinée, IndexWriter indexWriter, LocalDateTime time) throws IOException, ParseException {
-               
-       // indexReader = DirectoryReader.openIfChanged(indexReader);   
-        // indexSearcher = new IndexSearcher(indexReader);     
-        System.out.println("BUG HERE start");
-                System.out.println("BUG HERE start");
-                System.out.println("Paths.get(indexDirectoryLocationString = "+ Paths.get(indexDirectoryLocationString ));
+              
         indexReader = DirectoryReader.open(FSDirectory.open(Paths.get(indexDirectoryLocationString)));                                        //System.out.println("DEBUGGER --indexReader info: " + indexReader.maxDoc());
-        indexSearcher = new IndexSearcher(indexReader);             
-         System.out.println("BUG HERE end");        
-                System.out.println("BUG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> end");   
-        
+        indexSearcher = new IndexSearcher(indexReader);
+
         Query queryComplete;
         IRecherche recherche;
 
         if (!requêtePréUsinée.getHasFilter()) {                                             // Cette rechercne ne contient pas de filtreur d'extension (devient donc une simple Automatique with QeryParser)
-            System.out.println("\nSearching for '" + requêtePréUsinée.getStringSearch() + "' using QueryParser");
-            queryParser = new QueryParser(Constants.CONTENTS, new StandardAnalyzer());
+             queryParser = new QueryParser(Constants.CONTENTS, new StandardAnalyzer());
 
             try {
                 queryComplete = queryParser.parse(requêtePréUsinée.getStringSearch());
             }
             catch (ParseException ex) {
                 JOptionPane.showMessageDialog(null, "Oups, Votre requête à causée une défaillance: \nMessage d'erreur: " + ex.getMessage() + "\nVotre Requête est:" + requêtePréUsinée.getStringSearch());
-                 System.exit(1); return null; 
+                System.exit(1);
+                return null;
             }
 
             printQueryType(queryComplete);
@@ -103,13 +96,11 @@ public class Searcher {
 
             catch (ParseException ex) {
                 JOptionPane.showMessageDialog(null, "Oups, Votre requête à causée une défaillance: \nMessage d'erreur: " + ex.getMessage() + "\nVotre Requête est:" + requêtePréUsinée.getStringSearch());
-                 System.exit(1); 
+                System.exit(1);
             }
 
             Query contentTypeFilterQuery = new TermQuery(new Term(Constants.CONTENT_TYPE, requêtePréUsinée.getFiltreurExtension().getExtensionInclure())); // cela va prendre la chaine a utiliser pour la recherche dans content-type
 
-            System.out.println("DEBUG the contentTypeFilterQuery : " + Constants.CONTENT_TYPE + requêtePréUsinée.getFiltreurExtension().getExtensionInclure());
-          
             //  doit utiliser BooleanQuery  
             Builder queryAvecFiltreBuilder = new BooleanQuery.Builder();
             queryAvecFiltreBuilder.add(mainQuery, BooleanClause.Occur.MUST);
@@ -119,9 +110,8 @@ public class Searcher {
             printQueryType(queryComplete);
 
             //prepare la Recherche pour le dictionnaire (et logs éventuellement)               
-            // FactoryPattern pourRecherche ...
             recherche = IRechercheFactory.créerIRecherche("filtrer");
-                                  
+
             recherche.setChaineRecherche(requêtePréUsinée.getStringSearch());
             recherche.setCréeLe(LocalDateTime.now());
             if (recherche instanceof SimpleFiltrerRecherche) {       //utilise un test IF avec Cast subterfuge pour s'assurer que la méthode est bien visible.
@@ -139,20 +129,12 @@ public class Searcher {
         recherche.setFinaliséLe(LocalDateTime.now());
         recherche.setDuréeExecution(recherche.getCréeLe(), recherche.getFinaliséLe());
         rechercheDictionnaire.put(recherche, Math.toIntExact(topdocs.totalHits.value));  //Ajouter au dictionnaire des recherches 
-
-        System.out.println("   ");
-        System.out.println("***** dureé d'exécution: " + recherche.getDuréeExecution() + " ms.");
-        System.out.println("   ");
-        // System.out.println("DEbugging the adding to dictionnary: recherche/" + recherche.toString() + "Math.toIntExact(topdocs.totalHits.value)) =" + Math.toIntExact(topdocs.totalHits.value));
-        // System.out.println("   ");
-        // System.out.println("Printing disctionnaire ifo as well for debuggin: ");         System.out.println("   ");
+       
         //rechercheDictionnaire.forEach((key, value) -> System.out.println(key + ":" + value));        
 
         return new RechercheExtrant(topdocs, recherche);
 
     }
-
-
 
     public Document getDocument(ScoreDoc scoreDoc) throws CorruptIndexException, IOException {
         return indexSearcher.doc(scoreDoc.doc);
@@ -167,20 +149,5 @@ public class Searcher {
     }
         
             
-
-        
-    @Deprecated
-    public void displayHits(TopDocs topdocs, IRecherche recherche) throws CorruptIndexException, IOException {
-        System.out.println("Nonbre de TopDocs.totalHits.value = " + topdocs.totalHits.value);
-
-        for (final ScoreDoc scoreDoc : topdocs.scoreDocs) {
-            final int docId = scoreDoc.doc;
-            String pathToDoc = indexReader.document(docId).get("filename");
-            List<IndexableField> docFields = indexReader.document(docId).getFields();
-            System.out.println("Imprimons les champs du doc trouvés: " + docFields);
-            System.out.println("------------------------------------------------------------------Temps d'exécution : " + recherche.getDuréeExecution() + "finalisé la recherchele: " + recherche.getFinaliséLe() + "Hit (path): " + pathToDoc + "score: " + scoreDoc.score);
-        }
-    }     
-    
 
 }

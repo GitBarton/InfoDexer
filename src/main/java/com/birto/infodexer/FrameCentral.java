@@ -31,12 +31,10 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
 
+public class FrameCentral extends JFrame {
 
-public class FrameCentral extends JFrame {    
- 
     //Top section Panneau
-     JPanel topSectionPnl;
-    
+    JPanel topSectionPnl;
 
     //Colonne 1 - Top
     JPanel menufichierPanelpnl;
@@ -59,287 +57,240 @@ public class FrameCentral extends JFrame {
     JLabel sélectionExtensiontypelbl;
     JScrollPane contentTypeFiltreurscrpne;
     JList<String> contentTypelst;
-    JButton cacherExtensionFiltrebtn;    
-             
+    JButton cacherExtensionFiltrebtn;
+
     // Milieu section - Panneau Resultats
-    JPanel resultSectionpnl;    CardLayout cardLayoutResultsSection;
+    JPanel resultSectionpnl;
+    CardLayout cardLayoutResultsSection;
     JPanel noResultsEmptypnl;
-    JPanel resultspnl;   
-       
+    JPanel resultspnl;
+
     // Bas section 
-    JPanel basSectionPnl;     
-    JButton réinitialiserFormbtn; 
+    JPanel basSectionPnl;
+    JButton réinitialiserFormbtn;
     JButton exporterCorrespondance;
-        
-       
-         
-      public FrameCentral() throws IOException {                  
-         initComponents();
+
+    public FrameCentral() throws IOException {
+        initComponents();
     }
-           
- 
+
     private void initComponents() throws IOException {
-  
-       //JFRAME Properties    
+
+        //JFRAME Properties    
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout(0, 0));
-        setExtendedState(JFrame.MAXIMIZED_BOTH);        
-        setTitle("Info-Dexer");    
-        
-         
- //  Top section Panneau #1 ********************************                      
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setTitle("Info-Dexer");
+
+        //  Top section Panneau #1 ********************************                      
         GridBagLayout gridBagLayoutTopSectionPnl = new GridBagLayout();
-        
+
         topSectionPnl = new JPanel(gridBagLayoutTopSectionPnl);    //debug    topSectionPnl.setBorder(BorderFactory.createLineBorder(Color.BLUE, 10));        
-     
-        
-  
-  
-  
-                     
- // Début ********************************  COL 1 - Top ********************************  
-       
+
+        // Début ********************************  COL 1 - Top ********************************  
         menufichierPanelpnl = new JPanel();   ////debug menufichierPanelpnl.setBorder(new TitledBorder("menufichierPanelpnl"));
         menufichierPanelpnl.setBorder(BorderFactory.createLoweredBevelBorder());
-        menufichierPanelpnl.setLayout(new BoxLayout(menufichierPanelpnl, BoxLayout.Y_AXIS));   
-                                                                               
-        
-        FlowLayout  flowL = new  FlowLayout(FlowLayout.CENTER);                 
+        menufichierPanelpnl.setLayout(new BoxLayout(menufichierPanelpnl, BoxLayout.Y_AXIS));
+
+        FlowLayout flowL = new FlowLayout(FlowLayout.CENTER);
         hamburberPnl = new JPanel(flowL);                           ////debug  hamburberPnl.setBorder(new TitledBorder("hamburberPnl"));        
         fichierOptionsPnl = new JPanel(flowL);                      ////debug  fichierOptionsPnl.setBorder(new TitledBorder("fichierOptionsPnl"));
-                
-        
-       // Menu Hamburger (Fichier Options)********************************  
-        hamburgIco = new ImageIcon(scaleImage (getImageHamburg(), 25, 25) );   
-        hamburgerMenubtn = new javax.swing.JButton("Index", hamburgIco);          
-        hamburgerMenubtn.setVerticalTextPosition( SwingConstants.BOTTOM );
-        hamburgerMenubtn.setHorizontalTextPosition ( SwingConstants.CENTER); 
+
+        // Menu Hamburger (Fichier Options)********************************  
+        hamburgIco = new ImageIcon(scaleImage(getImageHamburg(), 25, 25));
+        hamburgerMenubtn = new javax.swing.JButton("Index", hamburgIco);
+        hamburgerMenubtn.setVerticalTextPosition(SwingConstants.BOTTOM);
+        hamburgerMenubtn.setHorizontalTextPosition(SwingConstants.CENTER);
         hamburgerMenubtn.setIconTextGap(2);
-        hamburgerMenubtn.setFont(new java.awt.Font("sansserif", 0, 8)); 
-        hamburberPnl.add(hamburgerMenubtn);   
-                    
+        hamburgerMenubtn.setFont(new java.awt.Font("sansserif", 0, 8));
+        hamburberPnl.add(hamburgerMenubtn);
+
         //les 2 boutons ********************************  
         // btn 1 - Ajouter
-        JLabel ajouterlbl = new JLabel("Fichier (+)", SwingConstants.CENTER); 
-        ajouterFichierbtn = new JButton(); 
+        JLabel ajouterlbl = new JLabel("Fichier (+)", SwingConstants.CENTER);
+        ajouterFichierbtn = new JButton();
         ajouterFichierbtn.setLayout(new BorderLayout());
-        ajouterFichierbtn.setFont(new java.awt.Font("sansserif", 0, 7)); 
+        ajouterFichierbtn.setFont(new java.awt.Font("sansserif", 0, 7));
         ajouterFichierbtn.add(ajouterlbl);
-        ajouterFichierbtn.setVerticalTextPosition ( SwingConstants.CENTER );  
+        ajouterFichierbtn.setVerticalTextPosition(SwingConstants.CENTER);
         ajouterFichierbtn.setVisible(false);                    // cacher au lancement
-      
+
         fichierOptionsPnl.add(ajouterFichierbtn);
-                
+
         // btn 2 - Retirer fichier 
-        JLabel enleverlbl = new JLabel("Fichier (-)", SwingConstants.CENTER); 
-        enleverFichierbtn = new JButton(); 
+        JLabel enleverlbl = new JLabel("Fichier (-)", SwingConstants.CENTER);
+        enleverFichierbtn = new JButton();
         enleverFichierbtn.setLayout(new BorderLayout());
-        enleverFichierbtn.setFont(new java.awt.Font("sansserif", 0, 7)); 
+        enleverFichierbtn.setFont(new java.awt.Font("sansserif", 0, 7));
         enleverFichierbtn.add(enleverlbl);
-        enleverFichierbtn.setHorizontalTextPosition ( SwingConstants.CENTER );
+        enleverFichierbtn.setHorizontalTextPosition(SwingConstants.CENTER);
         enleverFichierbtn.setVisible(false);                // cacher au lancement
-         
-        fichierOptionsPnl.add(enleverFichierbtn);       
-                    
-       
+
+        fichierOptionsPnl.add(enleverFichierbtn);
+
         // Ajouter les deux panels au conteneur en boxlayout.     
         menufichierPanelpnl.add(hamburberPnl);
         menufichierPanelpnl.add(fichierOptionsPnl);
-                      
-                                     
-     //CONSTRAINTS - MenufichierPanelpnl       // makeConstraints(int weight, int height, int x-axis placement, int y-axis placement , double weightx, double weighty) {
-      GridBagConstraints gbcMenufichierPanelpnl = makeConstraints(1,           2,          0 ,                   0,                     0.5,            0.5);
-      gbcMenufichierPanelpnl.anchor = GridBagConstraints.NORTHWEST;
-      gbcMenufichierPanelpnl.fill = GridBagConstraints.NONE;      
-      gridBagLayoutTopSectionPnl.setConstraints(menufichierPanelpnl, gbcMenufichierPanelpnl);
-         
-      //Ajouter MenufichierPanelpnl to au JPanel Top
-      topSectionPnl.add(menufichierPanelpnl);           
+
+        //CONSTRAINTS - MenufichierPanelpnl       // makeConstraints(int weight, int height, int x-axis placement, int y-axis placement , double weightx, double weighty) {
+        GridBagConstraints gbcMenufichierPanelpnl = makeConstraints(1, 2, 0, 0, 0.5, 0.5);
+        gbcMenufichierPanelpnl.anchor = GridBagConstraints.NORTHWEST;
+        gbcMenufichierPanelpnl.fill = GridBagConstraints.NONE;
+        gridBagLayoutTopSectionPnl.setConstraints(menufichierPanelpnl, gbcMenufichierPanelpnl);
+
+        //Ajouter MenufichierPanelpnl to au JPanel Top
+        topSectionPnl.add(menufichierPanelpnl);
+
+        // Fin  ********************************  COL 1 - Top ********************************       
      
- // Fin  ********************************  COL 1 - Top ********************************       
-
-       
- 
-
- 
- 
- 
- // Début ********************************  COL 2 - Top ********************************        
-    
-             
+        
+// Début ********************************  COL 2 - Top ********************************        
         barreRecherchePanelpnl = new JPanel();
         barreRecherchePanelpnl.setLayout(new BoxLayout(barreRecherchePanelpnl, BoxLayout.Y_AXIS));       //  barreRecherchePanelpnl.setBorder(new TitledBorder("barreRecherchePanelpnl"));
-           
-                        
-       /*//Titre de l'Application
-        appTitrelbl = new JLabel("<html><u><strong>Info-Dexer (beta)</strong></u></html>",JLabel.CENTER);
-        appTitrelbl.setFont(new Font("sansserif", Font.BOLD, 15)); 
-        appTitrelbl.setForeground(Color.BLACK);    
-        appTitrelbl.setAlignmentX(Component.CENTER_ALIGNMENT);  //   appTitrelbl.setBorder(new TitledBorder("appTitrelbl"));
-        barreRecherchePanelpnl.add(appTitrelbl) ;
-        */
-       
-      // Ajouter espace  
-        barreRecherchePanelpnl.add(Box.createRigidArea(new Dimension(20,50))); 
-            
+
+         // Ajouter espace  
+        barreRecherchePanelpnl.add(Box.createRigidArea(new Dimension(20, 50)));
+
         //TextArea pour entrer la chaine de recherche.
         searchStringtxf = new JTextField(50);
         searchStringtxf.setToolTipText("Entrer la chaîne de caractère"); // searchStringtxf.setBorder(new EmptyBorder(0, 25, 0, 25));     
-        searchStringtxf.setBorder(BorderFactory.createCompoundBorder(new LineBorder(Color.GRAY), new EmptyBorder(0,10,0, 50)));                   
-        searchStringtxf.setSize(30, 20);                  
-        searchStringtxf.setDisabledTextColor(new java.awt.Color(204, 204, 204));        
+        searchStringtxf.setBorder(BorderFactory.createCompoundBorder(new LineBorder(Color.GRAY), new EmptyBorder(0, 10, 0, 50)));
+        searchStringtxf.setSize(30, 20);
+        searchStringtxf.setDisabledTextColor(new java.awt.Color(204, 204, 204));
         searchStringtxf.setPreferredSize(new Dimension(80, 20));
-        barreRecherchePanelpnl.add(Box.createRigidArea(new Dimension(0,50))); 
-        barreRecherchePanelpnl.add(searchStringtxf);      
-        barreRecherchePanelpnl.add(Box.createRigidArea(new Dimension(0,10))); 
-        
-       //Button Rechercher
+        barreRecherchePanelpnl.add(Box.createRigidArea(new Dimension(0, 50)));
+        barreRecherchePanelpnl.add(searchStringtxf);
+        barreRecherchePanelpnl.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        //Button Rechercher
         lancerRecherchebtn = new JButton();
         lancerRecherchebtn.setText("Rechercher");
-        lancerRecherchebtn.setBorder(new CompoundBorder(new SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), new EmptyBorder(10,15,10,15)));
-        barreRecherchePanelpnl.add(lancerRecherchebtn);    
+        lancerRecherchebtn.setBorder(new CompoundBorder(new SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), new EmptyBorder(10, 15, 10, 15)));
+        barreRecherchePanelpnl.add(lancerRecherchebtn);
 
         // Label - Options Avancées de recherche
-       optionsRecherchelbl = new JLabel();
-       optionsRecherchelbl.setFont(new Font("sansserif", 1 , 10)); 
-       optionsRecherchelbl.setForeground(new Color(51, 51, 255));
-       optionsRecherchelbl.setText("Options Avancées"); 
-       optionsRecherchelbl.setPreferredSize(new Dimension(25, 10));
-       optionsRecherchelbl.setBorder(new EmptyBorder(0,10,0,0));
-        
-       barreRecherchePanelpnl.add(Box.createHorizontalGlue()); 
-       barreRecherchePanelpnl.add(optionsRecherchelbl); 
-           
+        optionsRecherchelbl = new JLabel();
+        optionsRecherchelbl.setFont(new Font("sansserif", 1, 10));
+        optionsRecherchelbl.setForeground(new Color(51, 51, 255));
+        optionsRecherchelbl.setText("Options Avancées");
+        optionsRecherchelbl.setPreferredSize(new Dimension(25, 10));
+        optionsRecherchelbl.setBorder(new EmptyBorder(0, 10, 0, 0));
+
+        barreRecherchePanelpnl.add(Box.createHorizontalGlue());
+        barreRecherchePanelpnl.add(optionsRecherchelbl);
 
         //Ajouter la colonne 2 au JPanel TOP
         //Constraints to Column 2 du TOP (barreRecherchePanelpnl) 
-         GridBagConstraints gbcBarreRecherchePanelpnl = makeConstraints(4, 2,  1 , 0 ,       1.5, 1.5);
-         gbcBarreRecherchePanelpnl.anchor =  GridBagConstraints.WEST;
-         gbcBarreRecherchePanelpnl.fill =  GridBagConstraints.BOTH;
-         gridBagLayoutTopSectionPnl.setConstraints( barreRecherchePanelpnl, gbcBarreRecherchePanelpnl );
-                  
-         
-         topSectionPnl.add(barreRecherchePanelpnl);
-        
-  // Fin ********************************  COL 2 - Top  ********************************   
-        
-       
-        
- // Début ********************************  COL 3 - Top ********************************   
-        
-     contentTypeFiltreurPanelpnl = new JPanel(new BorderLayout());
-     contentTypeFiltreurPanelpnl.setBorder(new CompoundBorder( new EmptyBorder(5,25,5,25),new LineBorder(Color.BLACK)));
-   
-     // Jlabel de la boîte contenant le  JList
-     sélectionExtensiontypelbl = new JLabel("Sélection par Type", JLabel.CENTER);
-     sélectionExtensiontypelbl.setFont(new java.awt.Font("sansserif", 0, 10)); // NOI18N
-     sélectionExtensiontypelbl.setText("Sélection par Type");
-     contentTypeFiltreurPanelpnl.add(sélectionExtensiontypelbl, BorderLayout.PAGE_START);
-     
-     // Ajouter Jlist / Le model est ajouter at runtime par le FrameControlleur via un ListModel    
-      contentTypelst = new JList<>();
-      contentTypelst.setFont(new java.awt.Font("sansserif", 0, 10)); 
-      contentTypelst.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-      contentTypeFiltreurscrpne = new JScrollPane();
-      contentTypeFiltreurscrpne.setViewportView(contentTypelst);      
-      contentTypeFiltreurscrpne.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(0, 10, 20, 10),  new EtchedBorder()));
-            contentTypeFiltreurscrpne.getViewport().setViewPosition( new Point(0, 0) );   
-      contentTypeFiltreurPanelpnl.add(contentTypeFiltreurscrpne, BorderLayout.CENTER);
-      
-      // Ajouter bouton "cacher"
-      cacherExtensionFiltrebtn = new JButton();
-      cacherExtensionFiltrebtn.setText("Cacher");
-      cacherExtensionFiltrebtn.setBorder(new EmptyBorder(0, 40, 10, 40));
-      cacherExtensionFiltrebtn.setFont(new java.awt.Font("sansserif", 0, 10)); 
-      cacherExtensionFiltrebtn.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-      
-      contentTypeFiltreurPanelpnl.add(cacherExtensionFiltrebtn, BorderLayout.SOUTH);
-         
+        GridBagConstraints gbcBarreRecherchePanelpnl = makeConstraints(4, 2, 1, 0, 1.5, 1.5);
+        gbcBarreRecherchePanelpnl.anchor = GridBagConstraints.WEST;
+        gbcBarreRecherchePanelpnl.fill = GridBagConstraints.BOTH;
+        gridBagLayoutTopSectionPnl.setConstraints(barreRecherchePanelpnl, gbcBarreRecherchePanelpnl);
+
+        topSectionPnl.add(barreRecherchePanelpnl);
+
+        // Fin ********************************  COL 2 - Top  ********************************   
     
-     //Ajouter JPanel Colonne 3 au JPanel TOP
-     // CONSTRAINTS    
-         GridBagConstraints gbcContentTypeFiltreurPanelpnl = makeConstraints(1, 2,     5 , 0,     0, 0);
-         gbcContentTypeFiltreurPanelpnl.anchor =  GridBagConstraints.EAST;
-         gbcContentTypeFiltreurPanelpnl.fill =  GridBagConstraints.BOTH;
-         gridBagLayoutTopSectionPnl.setConstraints( contentTypeFiltreurPanelpnl, gbcContentTypeFiltreurPanelpnl );          
-     
-         topSectionPnl.add(contentTypeFiltreurPanelpnl);
-     
- // Fin  ********************************  COL 3 - Top ********************************   
-     
- 
- // IMPORTANT  | Ajouter Top Section Panel au JPanel Primaire (Root)
-  this.add(topSectionPnl , BorderLayout.NORTH);
-  
+        
+        // Début ********************************  COL 3 - Top ********************************   
+        contentTypeFiltreurPanelpnl = new JPanel(new BorderLayout());
+        contentTypeFiltreurPanelpnl.setBorder(new CompoundBorder(new EmptyBorder(5, 25, 5, 25), new LineBorder(Color.BLACK)));
+
+        // Jlabel de la boîte contenant le  JList
+        sélectionExtensiontypelbl = new JLabel("Sélection par Type", JLabel.CENTER);
+        sélectionExtensiontypelbl.setFont(new java.awt.Font("sansserif", 0, 10)); // NOI18N
+        sélectionExtensiontypelbl.setText("Sélection par Type");
+        contentTypeFiltreurPanelpnl.add(sélectionExtensiontypelbl, BorderLayout.PAGE_START);
+
+        // Ajouter Jlist / Le model est ajouter at runtime par le FrameControlleur via un ListModel    
+        contentTypelst = new JList<>();
+        contentTypelst.setFont(new java.awt.Font("sansserif", 0, 10));
+        contentTypelst.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        contentTypeFiltreurscrpne = new JScrollPane();
+        contentTypeFiltreurscrpne.setViewportView(contentTypelst);
+        contentTypeFiltreurscrpne.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(0, 10, 20, 10), new EtchedBorder()));
+        contentTypeFiltreurscrpne.getViewport().setViewPosition(new Point(0, 0));
+        contentTypeFiltreurPanelpnl.add(contentTypeFiltreurscrpne, BorderLayout.CENTER);
+
+        // Ajouter bouton "cacher"
+        cacherExtensionFiltrebtn = new JButton();
+        cacherExtensionFiltrebtn.setText("Cacher");
+        cacherExtensionFiltrebtn.setBorder(new EmptyBorder(0, 40, 10, 40));
+        cacherExtensionFiltrebtn.setFont(new java.awt.Font("sansserif", 0, 10));
+        cacherExtensionFiltrebtn.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        contentTypeFiltreurPanelpnl.add(cacherExtensionFiltrebtn, BorderLayout.SOUTH);
+
+        //Ajouter JPanel Colonne 3 au JPanel TOP
+        // CONSTRAINTS    
+        GridBagConstraints gbcContentTypeFiltreurPanelpnl = makeConstraints(1, 2, 5, 0, 0, 0);
+        gbcContentTypeFiltreurPanelpnl.anchor = GridBagConstraints.EAST;
+        gbcContentTypeFiltreurPanelpnl.fill = GridBagConstraints.BOTH;
+        gridBagLayoutTopSectionPnl.setConstraints(contentTypeFiltreurPanelpnl, gbcContentTypeFiltreurPanelpnl);
+
+        topSectionPnl.add(contentTypeFiltreurPanelpnl);
+
+        // Fin  ********************************  COL 3 - Top ********************************   
+        // IMPORTANT  | Ajouter Top Section Panel au JPanel Primaire (Root)
+        this.add(topSectionPnl, BorderLayout.NORTH);
+
 //********************************   FIN SECTION 1   ********************************   
 //********************************   ********************************   *************
+        
 
- 
+//********* Section 2 Panneau - Résultats ************************************    
+        //Créer le panneau qui contient des JPanel qui sont alternables via un CardLayout 
+        cardLayoutResultsSection = new CardLayout(0, 0);
 
+        resultSectionpnl = new JPanel(cardLayoutResultsSection);
+        resultSectionpnl.setPreferredSize(new Dimension(900, 400)); //  resultSectionpnl.setBorder(new TitledBorder("resultSectionpnl (parent-top)"));
 
+        //empty Jpanel pour les résultas          
+        noResultsEmptypnl = new JPanel();
+        noResultsEmptypnl.setBackground(Color.GRAY); // noResultsEmptypnl.setBorder(new TitledBorder("noResultsEmptypnl (child-0-NoRez)"));
+        noResultsEmptypnl.setBorder(new EtchedBorder(2));
+        noResultsEmptypnl.setSize(800, 350);
 
- //********* Section 2 Panneau - Résultats ************************************    
-     
-     //Créer le panneau qui contient des JPanel qui sont alternables via un CardLayout 
-     cardLayoutResultsSection= new CardLayout(0,0); 
-     
-     resultSectionpnl = new JPanel ( cardLayoutResultsSection );
-     resultSectionpnl.setPreferredSize(new Dimension(900,400));  
-     resultSectionpnl.setBorder(new TitledBorder("resultSectionpnl (parent-top)"));
-          
-     //empty Jpanel pour les résultas          
-     noResultsEmptypnl = new JPanel(); noResultsEmptypnl.setBackground(Color.BLACK); noResultsEmptypnl.setBorder(new TitledBorder("noResultsEmptypnl (child-0-NoRez)"));
-     noResultsEmptypnl.setBorder(  new EtchedBorder(2)  );            
-     noResultsEmptypnl.setSize(800, 350);
-     
-     resultSectionpnl.add(noResultsEmptypnl, "vide"); 
-          
-     // L'autre contiendra les valeurs et sera généré dynamiquement... 
-     resultspnl = new JPanel();  resultspnl.setBackground(Color.ORANGE); resultspnl.setBorder(new TitledBorder("resultspnl (child-1-Rez)"));
-     resultspnl.setBorder( new EtchedBorder(2)  );  
-      noResultsEmptypnl.setSize(800, 350);
-      
-     resultSectionpnl.add(resultspnl,"non-vide"); 
-                
-    
- // IMPORTANT  | Ajouter Top Section Panel au JPanel Primaire (Root)
-      this.add( resultSectionpnl , BorderLayout.CENTER);
+        resultSectionpnl.add(noResultsEmptypnl, "vide");
+
+        // L'autre contiendra les valeurs et sera généré dynamiquement... 
+        resultspnl = new JPanel();   // resultspnl.setBackground(Color.ORANGE); resultspnl.setBorder(new TitledBorder("resultspnl (child-1-Rez)"));
+        resultspnl.setBorder(new EtchedBorder(2));
+        noResultsEmptypnl.setSize(800, 350);
+
+        resultSectionpnl.add(resultspnl, "non-vide");
+
+        // IMPORTANT  | Ajouter Top Section Panel au JPanel Primaire (Root)
+        this.add(resultSectionpnl, BorderLayout.CENTER);
 
 //********************************   FIN SECTION 2   ********************************   
 //********************************   ********************************   *************
 
 
-
-
-
 //********* Section 3 Panneau - Buttons en bas de page ***************************    
         basSectionPnl = new JPanel(new FlowLayout(FlowLayout.CENTER));
         basSectionPnl.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-       
+
         réinitialiserFormbtn = new JButton("Réinitialiser");
         réinitialiserFormbtn.setVisible(true);
         réinitialiserFormbtn.setEnabled(false);
-    
-        exporterCorrespondance = new JButton("Exporter"); 
+
+        exporterCorrespondance = new JButton("Exporter");
         exporterCorrespondance.setVisible(false);
-        
+
         basSectionPnl.add(réinitialiserFormbtn);
         basSectionPnl.add(exporterCorrespondance);
-                
- // IMPORTANT  | Ajouter Top Section Panel au JPanel Primaire (Root)
-     this.add(basSectionPnl , BorderLayout.SOUTH);
+
+        // IMPORTANT  | Ajouter Top Section Panel au JPanel Primaire (Root)
+        this.add(basSectionPnl, BorderLayout.SOUTH);
 
 //********************************   FIN SECTION 3   ********************************   
 //***********************************************************************************
-    
-   
-   //revalidate();
-   //setLocationRelativeTo(null); //get it in the middle of the screen
-    //setAlwaysOnTop(true);
-    setVisible(true);
-    repaint();
-    }                     
-    
+      
+
+setVisible(true);
+repaint();
+    }
+
           
  private Image scaleImage(Image image, int w, int h) {
     Image scaled = image.getScaledInstance(w, h, Image.SCALE_SMOOTH);
@@ -383,7 +334,6 @@ public class FrameCentral extends JFrame {
         this.exporterCorrespondance = exporterCorrespondance;
     }
        
-
     public JPanel getResultSectionpnl() {
         return resultSectionpnl;
     }

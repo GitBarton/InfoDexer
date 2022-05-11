@@ -7,9 +7,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -68,100 +66,94 @@ public class FrameControlleur {
         // set the Jlist value to the contentType filter - dynamically       
         DefaultListModel<String> listeExtensionType = new DefaultListModel<>();
         listeExtensionType.addAll(Util.fichierExtension);
-        view.getContentTypelst().setModel(listeExtensionType);      
-                
+        view.getContentTypelst().setModel(listeExtensionType);
 
         view.getContentTypelst().setSelectionModel(new DefaultListSelectionModel() {
-         public void setSelectionInterval(int index0, int index1) {
-            if (index0 == index1) {
-            if (isSelectedIndex(index0)) {
-            removeSelectionInterval(index0, index0);
-            return;
-          }
-        }
-        super.setSelectionInterval(index0, index1);
-      }
+            public void setSelectionInterval(int index0, int index1) {
+                if (index0 == index1) {
+                    if (isSelectedIndex(index0)) {
+                        removeSelectionInterval(index0, index0);
+                        return;
+                    }
+                }
+                super.setSelectionInterval(index0, index1);
+            }
 
-      @Override
-      public void addSelectionInterval(int index0, int index1) {
-        if (index0 == index1) {
-          if (isSelectedIndex(index0)) {
-            removeSelectionInterval(index0, index0);
-            return;
-          }
-          super.addSelectionInterval(index0, index1);
-        }
-      }
-   });      
-    
+            @Override
+            public void addSelectionInterval(int index0, int index1) {
+                if (index0 == index1) {
+                    if (isSelectedIndex(index0)) {
+                        removeSelectionInterval(index0, index0);
+                        return;
+                    }
+                    super.addSelectionInterval(index0, index1);
+                }
+            }
+        });
+
     }
-    
-    
+
     public void initControlleur() {
 
         //barre de recherche Listener pour SetEnabled(true or false)
         enableRechercheBtnDocumentListener();   // Visibilité dynamique du button "Rechercher" en fonction du contenu du TextArea
-                
+
         // BOUTON RECHERCHER
-        /*2*/ view.getLancerRecherchebtn().addActionListener((ActionEvent e) -> {                      
-            
+        view.getLancerRecherchebtn().addActionListener((ActionEvent e) -> {
+
             try {
-                    revertEmptyResultPanel();                                  
-                    swapCardJpanelToResults ( prepCorrespondanceJPanelGenerator(   moteurRecherche.searchIndex ( prépareRechercheSéquence() , indexer.getWriter(), LocalDateTime.now(ZoneId.systemDefault()) 
-                    ) ) );                                                                
-           
+                revertEmptyResultPanel();
+                swapCardJpanelToResults(prepCorrespondanceJPanelGenerator(moteurRecherche.searchIndex(prépareRechercheSéquence(), indexer.getWriter(), LocalDateTime.now(ZoneId.systemDefault())
+                )));
+
             }
             catch (IOException | ParseException ex) {
                 Logger.getLogger(FrameControlleur.class.getName()).log(Level.SEVERE, null, ex);
-            }                 
+            }
         });
 
- 
         //Label permettant l'accàs aux options avancées de recherche (filtrage par extension avec JList)
         view.getOptionsRecherchelbl().addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) {     flipIsVisiblePanel(view.getContentTypeFiltreurPanelpnl());     }    });
-                        
-        
+            public void mousePressed(MouseEvent e) {
+                flipIsVisiblePanel(view.getContentTypeFiltreurPanelpnl());
+            }
+        });
+
         // ajout d'un listener qui cache le JList pour filtrer (iltrage par extension avec JList))...
         view.getCacherExtensionFiltrebtn().addActionListener(e -> view.getContentTypeFiltreurPanelpnl().setVisible(false));
-       
+
         //JList 
         view.getContentTypelst().getSelectionModel().addListSelectionListener(new SharedListSelectionHandler()); // can be removed???? <-to test???
-         
 
-       //Hamburger Menu 
-       view.getHamburgerMenubtn().addActionListener(e -> flipMenuFichierButtonsVisibility());
-       
-            
+        //Hamburger Menu 
+        view.getHamburgerMenubtn().addActionListener(e -> flipMenuFichierButtonsVisibility());
+
         //Ajouter Fichier bouton | Menu Hambrger
         view.getAjouterFichierbtn().addActionListener(e -> {
             try {
-                   fileIndexOperation(Constants.ActionFichier.Ajouter);                         
+                fileIndexOperation(Constants.ActionFichier.Ajouter);
             }
             catch (InterruptedException | IOException ex) {
                 Logger.getLogger(FrameControlleur.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }   ); 
-            
-        
+        });
+
         //Retirer Fichier bouton | Menu Hambrger
         view.getEnleverFichierbtn().addActionListener(e -> {
             try {
-                   fileIndexOperation(Constants.ActionFichier.Retirer);                         
+                fileIndexOperation(Constants.ActionFichier.Retirer);
             }
             catch (InterruptedException | IOException ex) {
                 Logger.getLogger(FrameControlleur.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }   );  
-    
-        
-         // Button Réinitialiser le formulaire....
-         view.getRéinitialiserFormbtn().addActionListener(e -> clearAll(view));
+        });
+
+        // Button Réinitialiser le formulaire....
+        view.getRéinitialiserFormbtn().addActionListener(e -> clearAll(view));
 
     }
 
-    
     public File choisirFichier(Constants.ActionFichier actionSurFichier) { //EVent must be passed here? 
 
         JFileChooser jfc;
@@ -175,7 +167,7 @@ public class FrameControlleur {
                 jfc.setDialogTitle("Choisir un fichier à " + actionSurFichier.toString() + " de l'index");
                 jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 returnValue = jfc.showSaveDialog(view);
-                
+
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     if (jfc.getSelectedFile().isFile()) {
                         System.out.println("Vous avez sélectionner : " + jfc.getSelectedFile());
@@ -193,7 +185,7 @@ public class FrameControlleur {
                 jfc.setDialogType(JFileChooser.OPEN_DIALOG);
                 jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 returnValue = jfc.showDialog(view, "Sélection");
-                
+
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     if (jfc.getSelectedFile().isFile()) {
                         System.out.println("Vous avez sélectionner : " + jfc.getSelectedFile());
@@ -209,28 +201,22 @@ public class FrameControlleur {
         return jfc.getSelectedFile();
 
     }
-    
-    
-    
-    
+
     public FileAction fileIndexOperation(Constants.ActionFichier action) throws InterruptedException, IOException {
         //Obtenir le fichier frace a une méthode dédiée (ChoisirFichier) 
         File file = choisirFichier(action);
         FileAction fileAction = null;
 
-        
         if (file != null) {                                             //validation de non nullité
             fileAction = new FileAction(action, file.getName());
             getIndexer().wakeIndexWriter(); //reveille l'indexWriter
-            
+
             System.out.println(file.getName());
 
-            
-        
             // {debug & test} get count of files being indexed? 
             int preIndexCountDocs = (int) getIndexer().getWriter().getDocStats().numDocs;
             int postIndexCountDocs;
-            
+
             //voulez tjrs procédez avec ce fichier? 
             int reply = JOptionPane.showConfirmDialog(view, "Voulez-vous vraiment " + action + " le fichier suivant à l'index?\n Nom du fichier: " + fileAction.getNomFichier(), action + " FICHIER", JOptionPane.YES_NO_OPTION);
 
@@ -243,8 +229,8 @@ public class FrameControlleur {
 
                         //Copier le nouveau fichier vers Active docs                      
                         try {
-                          FileUtils.copyFileToDirectory(file, destActiveDocs);
-                                                    
+                            FileUtils.copyFileToDirectory(file, destActiveDocs);
+
                         }
                         catch (FileNotFoundException e) {
                             System.out.println("File not found: " + e.getMessage());
@@ -256,16 +242,15 @@ public class FrameControlleur {
                         /*Action d'indexation du nouveau fichier  */ System.out.println("preIndexCountDocs: " + preIndexCountDocs); //Debug only
 
                         try {
-                                                          
+
                             System.out.println("--------------------------------------------------------------------------------------------- before FileUtils.getFile(destActiveDocs, file.getName()  ");
-                            File nouvelleEntrée =  FileUtils.getFile(destActiveDocs, file.getName()  ); 
-                            System.out.println("--------------------------------------------------------------------------------------------- after FileUtils.getFile(destActiveDocs, file.getName()  " + destActiveDocs+" filename: " +file.getName());
-                            
-                            System.out.println("Debugging nouvelleENtrée to ensure we get the right candidate: " + nouvelleEntrée.getPath() + nouvelleEntrée.getParent() );
-                                                      
-                            getIndexer().indexFile(nouvelleEntrée);  
-                        
-                        
+                            File nouvelleEntrée = FileUtils.getFile(destActiveDocs, file.getName());
+                            System.out.println("--------------------------------------------------------------------------------------------- after FileUtils.getFile(destActiveDocs, file.getName()  " + destActiveDocs + " filename: " + file.getName());
+
+                            System.out.println("Debugging nouvelleENtrée to ensure we get the right candidate: " + nouvelleEntrée.getPath() + nouvelleEntrée.getParent());
+
+                            getIndexer().indexFile(nouvelleEntrée);
+
                         }
                         catch (Exception ex) {
                             Logger.getLogger(FrameControlleur.class.getName()).log(Level.SEVERE, null, ex);
@@ -280,7 +265,7 @@ public class FrameControlleur {
 
                             /*Fournir RetroAction via JOptionPane */
                             JOptionPane.showMessageDialog(
-                                  null,"Fichier traité avec succès.\nNomd fu fichier: " + fileAction.getNomFichier() + "\nAction: " + fileAction.getTypeAction().toString(),
+                                  null, "Fichier traité avec succès.\nNomd fu fichier: " + fileAction.getNomFichier() + "\nAction: " + fileAction.getTypeAction().toString(),
                                   action + " fichier!\nSUCCÈS.",
                                   JOptionPane.WARNING_MESSAGE
                             );
@@ -291,13 +276,10 @@ public class FrameControlleur {
                         break;
                     // Fin de l'ajout d'un fichier -- Case *******************                    // Fin de l'ajout d'un fichier -- Case *******************
 
-                        
-                        
                     case Retirer: //************************************Retirer************************************
-                       
+
                         System.out.println("preCountDocs: devrait être [-1] " + preIndexCountDocs);
                         System.out.println("Le nom du fichier que nous allons effacer est Nom {getName}: " + file.getName());
-                
 
                         // Retirer le document de dans Active Docs                         
                         try {
@@ -309,13 +291,12 @@ public class FrameControlleur {
                         catch (IOException e) { // catch all IOExceptions not handled by previous catch blocks
                             System.out.println("General I/O exception: " + e.getMessage());
                         }
-                        
-                       
+
                         //remove from index: 
-                        indexer.getWriter().deleteDocuments( new Term(Constants.FILE_NAME, file.getName() )   );
+                        indexer.getWriter().deleteDocuments(new Term(Constants.FILE_NAME, file.getName()));
                         commitOndemand();
-    
-                            //{debug & test} Post count
+
+                        //{debug & test} Post count
                         postIndexCountDocs = (int) getIndexer().getWriter().getDocStats().numDocs;
                         System.out.println("postIndexCountDocs: devrait être [-1] " + postIndexCountDocs);
 
@@ -328,7 +309,7 @@ public class FrameControlleur {
                                   JOptionPane.WARNING_MESSAGE
                             );
                         } //If
-                        
+
                         //Mettre le status de l'action [Retirer] comme étant un Succès
                         fileAction.setEstSuccès(true);
                         break;
@@ -353,8 +334,8 @@ public class FrameControlleur {
         }
 
         // S'assurer que les changement sont bien appliqués... et toute de suite... 
-       commitOndemand();
-             
+        commitOndemand();
+
         return fileAction;
     }
 
@@ -388,15 +369,14 @@ public class FrameControlleur {
         view.getCardLayoutResultsSection().show(view.getResultSectionpnl(), "non-vide");
         view.getResultspnl().removeAll();
         view.getResultspnl().add(scrpane);
-     
+        
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 scrpane.getVerticalScrollBar().setValue(0);
             }
         });
         view.revalidate();
-        view.repaint();
-   
+        view.repaint();  
         
     }
 
@@ -438,17 +418,15 @@ public class FrameControlleur {
         System.out.println("finalisé le fin: "+ rechercheExtrant.getRecherche().finaliséLe );        
         
                         
-        String filtre = rechercheExtrant.getRecherche() instanceof SimpleFiltrerRecherche     //utilise un test enhanced IF avec Cast subterfuge pour s'assurer que la méthode est bien visible.         
+        String filtre = rechercheExtrant.getRecherche() instanceof SimpleFiltrerRecherche     
               ? ((SimpleFiltrerRecherche) rechercheExtrant.getRecherche()).getFiltre().getExtensionInclure() 
               : "aucun";        
                 
         
         GridBagLayout gbaglayoutCorrespondance = new GridBagLayout();       
 
-        JPanel correspondanceIntérieurpnl = new JPanel();
-        correspondanceIntérieurpnl.setBackground(Color.PINK);
-                
-        correspondanceIntérieurpnl.setBorder(new LineBorder(Color.RED));  //correspondancepnl.setPreferredSize(new Dimension(500, 600));
+        JPanel correspondanceIntérieurpnl = new JPanel();     //   correspondanceIntérieurpnl.setBackground(Color.PINK);                
+        correspondanceIntérieurpnl.setBorder(new LineBorder(Color.RED)); 
         correspondanceIntérieurpnl.setLayout(gbaglayoutCorrespondance);
  
        // Then  - ROw 1 = exctime + hit count
@@ -456,7 +434,7 @@ public class FrameControlleur {
         execEtHitstxt.setEditable(false);
         TitledBorder titleBorderCorresTop = new TitledBorder ("Sommaire des correspondances"); 
         titleBorderCorresTop.setTitleJustification(TitledBorder.CENTER);
-        execEtHitstxt.setBorder(BorderFactory.createCompoundBorder(titleBorderCorresTop,  BorderFactory.createEmptyBorder(5, 5, 5, 5) ) );   //>>TODO>>>Add padding to TEXT Area:    
+        execEtHitstxt.setBorder(BorderFactory.createCompoundBorder(titleBorderCorresTop,  BorderFactory.createEmptyBorder(5, 5, 5, 5) ) );     
         execEtHitstxt.append("Chaine de texte recherchée: " + rechercheExtrant.getRecherche().getChaineRecherche()+"\n");
         execEtHitstxt.append("Nombre de correspondances présente: " + countCorrespondance + "\n");
         execEtHitstxt.append("Temps d'éxécution (ms): " + execTime + "\n");
@@ -483,8 +461,7 @@ public class FrameControlleur {
         for (final ScoreDoc scoreDoc : rechercheExtrant.getDocs().scoreDocs) {
 
             JTextArea tempTextArea = new JTextArea();
-            tempTextArea.setEditable(false);
-            tempTextArea.setBackground(Color.CYAN);
+            tempTextArea.setEditable(false);    //  tempTextArea.setBackground(Color.CYAN);
              TitledBorder titleBorderCorresBottom = new TitledBorder ("[Correspondance "+entrée+"]"); 
              titleBorderCorresBottom.setTitleJustification(TitledBorder.CENTER);
             tempTextArea.setBorder(BorderFactory.createCompoundBorder(titleBorderCorresBottom,  BorderFactory.createEmptyBorder(5, 5, 5, 5) ) );      
@@ -506,16 +483,15 @@ public class FrameControlleur {
             
             gbaglayoutCorrespondance.setConstraints(tempTextArea, gbcIterator);   
                          
-            correspondanceIntérieurpnl.add(tempTextArea, gbcIterator); //   correspondanceIntérieurpnl.setBackground(Color.GREEN);
+            correspondanceIntérieurpnl.add(tempTextArea, gbcIterator); 
             correspondanceIntérieurpnl.setVisible(true);
             
                          
-            entrée++; // augmenter l'itérateur et ensuite on ajoute autres entrées...  // à la fin il va falloir retourne le jPanel et s'amuser a le faire apparaitre et dispâraitre....      
+            entrée++; // augmenter l'itérateur et ensuite on ajoute autres entrées...  //  
 
         }
                         
-       JScrollPane  resultscp = new JScrollPane (correspondanceIntérieurpnl, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS ,HORIZONTAL_SCROLLBAR_NEVER  ); 
-     //   SmartScroller scroller =  new SmartScroller(resultscp, SmartScroller.VERTICAL, SmartScroller.START); 
+       JScrollPane  resultscp = new JScrollPane (correspondanceIntérieurpnl, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_NEVER  );    
        resultscp.getViewport().setPreferredSize(new Dimension(650, 700));
        resultscp.setAutoscrolls(false);
        return resultscp;     
@@ -531,7 +507,7 @@ public class FrameControlleur {
         HashMap<String, String> datatoDisplay = new HashMap<String, String>();
 
         try {
-            //Filepath?
+            //Filepath
             datatoDisplay.put(Constants.FILE_PATH, moteurRecherche.indexReader.document(docId).get(Constants.FILE_PATH));
             System.out.println(" in prepCorrespndanceData path: =" + Constants.FILE_PATH + " & " + datatoDisplay.get(Constants.FILE_PATH));
 
@@ -631,8 +607,7 @@ public class FrameControlleur {
     
     
     private void checkEmptyForm() {
-        boolean value = !view.getSearchStringtxf().getText().trim().isEmpty() || !FrameControlleur.listIsEmpty;
-        System.out.println("this is the value passed to the checkEmptyForm value =  "+  value);
+        boolean value = !view.getSearchStringtxf().getText().trim().isEmpty() || !FrameControlleur.listIsEmpty;       
         view.getRéinitialiserFormbtn().setEnabled(value);      
     }
 
@@ -661,7 +636,7 @@ class SharedListSelectionHandler implements ListSelectionListener {
         int firstIndex = e.getFirstIndex();         int lastIndex = e.getLastIndex();
         boolean isAdjusting = e.getValueIsAdjusting();
         
-        System.out.println("Event for indexes "                       + firstIndex + " - " + lastIndex                        + "; isAdjusting is " + isAdjusting                        + "; selected indexes:");
+      // DEBUG...   System.out.println("Event for indexes "                       + firstIndex + " - " + lastIndex                        + "; isAdjusting is " + isAdjusting                        + "; selected indexes:");
 
         if (lsm.isSelectionEmpty()) {
              System.out.println(" <none>  is on!");

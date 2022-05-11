@@ -15,6 +15,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 
+
 //Source: Externe
 public class FileUtils {
 	  public static boolean copyFile(final File toCopy, final File destFile) {

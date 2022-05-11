@@ -21,7 +21,7 @@ public class FiltreurExtension {
         if (filtre.contains("MS-Word")) {
             this.extensionInclure = amalgameurPourMSWord();
             System.out.println("this.extensionInclure =" + this.extensionInclure);
-            return; //break it out... 
+            return; 
         }
         //else
         this.extensionInclure = contentType.get(filtre);     // trouve la valeur dans la Map des filtreur de contenu         

@@ -1,8 +1,8 @@
 package com.birto.infodexer;
 
-
 import com.birto.infodexer.Constants.ActionFichier;
 import java.time.LocalDateTime;
+
 
 public class FileAction {
 
@@ -14,8 +14,7 @@ public class FileAction {
     public FileAction(ActionFichier typeAction,String nomFichier) {
         this.typeAction = typeAction;
         this.dateAction = LocalDateTime.now();
-        this.nomFichier = nomFichier;
-        this.estSuccès = estSuccès;
+        this.nomFichier = nomFichier;        
     }
   
   

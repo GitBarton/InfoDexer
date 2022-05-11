@@ -69,6 +69,7 @@ public class TikaIndexer {
         débutTempsIndexation = new Date().getTime();
         
        File[] files = new File(dataDir).listFiles();      //get all files in the data directory
+     
        for (File f : files) {
             //System.out.println("CreateINdex Methos a file got listed !!!");
             if (!f.isDirectory() && !f.isHidden() && f.exists() && f.canRead()) {
@@ -81,7 +82,7 @@ public class TikaIndexer {
     }
 
     public void indexFile(File file) throws IOException, Exception {
-        System.out.println("Attempting to Index " + file.getCanonicalPath());
+        //  System.out.println("Attempting to Index " + file.getCanonicalPath());
         Document document = getDocument(file);
         System.out.println(writer.getDocStats());
         writer.addDocument(document);
@@ -127,8 +128,7 @@ public class TikaIndexer {
         return doc;
     }
 
-    public void commit() throws CorruptIndexException, IOException {
-        
+    public void commit() throws CorruptIndexException, IOException {       
         
         writer.commit();
         
@@ -187,10 +187,5 @@ public class TikaIndexer {
         boolean isExistantIndex = DirectoryReader.indexExists(indexDirectory);        
         return isExistantIndex;
     }
-    
-    
-    
-    
-    
-    
+           
 }

@@ -12,22 +12,15 @@ import javax.swing.Timer;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 
-
-// J"aai changer Session intiaittion dans le métode main pour une session quiest partie 
-//de l'instance de sessionCOntrolleur et je vais ajouter un référence dans le constructeut de fRameCotroleur desessionsControllerui... 
-
-
 public class SessionControlleur {
-    
-    private Session session;
 
-    
+    private Session session;
     
     public static void main(String[] args) throws URISyntaxException, ParseException, IOException {
 
         SessionControlleur sessionControlleur = new SessionControlleur();
         sessionControlleur.session = new Session(LocalDateTime.now(), System.getProperty("user.name"), System.getProperty("os.name"));             //Prépare la Session avec les paramètres clés...      // DEBUG**  System.out.println(s.getDébutSession() + " " + s.getNomUsager() + " " + s.getOS());
-      
+
         //Premier lancement de l'application? 
         if (sessionControlleur.session.isEstPremierLancement()) {
             final JOptionPane pane = new JOptionPane();
@@ -39,45 +32,35 @@ public class SessionControlleur {
             t.stop();
         }
 
-        
-        
-        
         /// INDEXING COMMENCE ICI
         TikaIndexer tikaIndexeur = new TikaIndexer(sessionControlleur.session.getPathToIndex().toString(), true);      // Indexeur Init
 
         if (!tikaIndexeur.checkIndexExist()) {                                                       // Vérifier si index existe ou non.
 
-            try {/*INDEX.CREATE*/ 
-                
-                tikaIndexeur.createIndex(sessionControlleur.session.getPathToActiveDocs().toString()) ;    //debug   System.out.println("session.getpathActiveDocs().toString() = " + session.getpathActiveDocs().toString());
+            try {/*INDEX.CREATE*/
+
+                tikaIndexeur.createIndex(sessionControlleur.session.getPathToActiveDocs().toString());    //debug   System.out.println("session.getpathActiveDocs().toString() = " + session.getpathActiveDocs().toString());
                 tikaIndexeur.commit();
             }
-            
+
             catch (Exception ex) {
                 Logger.getLogger(SessionControlleur.class.getName()).log(Level.SEVERE, null, ex);
             }
-                                                                                                       //debug   System.out.println("----------------------------------------------------------------------------------------------");        System.out.println("Nombre de document dans l'index: " + tikaIndexeur.getWriter().getDocStats().numDocs);        System.out.println("----------------------------------------------------------------------------------------------");
-         
-           
-   //          CheckIndex checkInd = new CheckIndex( tikaIndexeur.getIndexDirectory(), tikaIndexeur.getWriter().IndexWriter.WRITE_LOCK_NAME ) ;
-          
-   //          tikaIndexeur.getWriter().close();                                                                                           //debug    System.out.println("----------------------------------------------------------------------------------------------\\\r\\nÉtat de l'index actuel est: " + tikaIndexeur.checkIndexStatus(checkInd.checkIndex()));  System.out.println("----------------------------------------------------------------------------------------------");         System.out.println("Index créé en : " + (tikaIndexeur.finTempsIndexation - tikaIndexeur.débutTempsIndexation) + " milliseconde.");
-          
+
+            //  CheckIndex checkInd = new CheckIndex( tikaIndexeur.getIndexDirectory(), tikaIndexeur.getWriter().IndexWriter.WRITE_LOCK_NAME ) ;
+            //  tikaIndexeur.getWriter().close(); 
         }
         else {
             System.out.println("Index est déjà en place - réindexation NON requise");
         }
-        
 //*************************************  /// INDEXING FINIT ICI ////**********************************************************        
-
+    
         //Searcher instantiation 
         Searcher moteurRecherche = new Searcher(sessionControlleur.session.getPathToIndex().toString());
 
         
-
 // ***************************************************************** GUI ***********************************************   
-      
-       /* Create and display the form */
+        /* Create and display the form */
         EventQueue.invokeLater(() -> {
             try {
 
@@ -91,8 +74,7 @@ public class SessionControlleur {
                 System.out.println(e.getMessage());
             }
         });
-           }
-
+    }
 
     public Session getSession() {
         return session;

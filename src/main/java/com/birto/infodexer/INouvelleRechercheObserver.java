@@ -8,7 +8,5 @@ public interface INouvelleRechercheObserver {
     
     public void notifyNouvelleRecherche();
     
-         
-    
 }
 
